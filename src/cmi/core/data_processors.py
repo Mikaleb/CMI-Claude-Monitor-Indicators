@@ -7,7 +7,7 @@ code duplication across different components.
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 
-from claude_monitor.utils.time_utils import TimezoneHandler
+from cmi.utils.time_utils import TimezoneHandler
 
 
 class TimestampProcessor:

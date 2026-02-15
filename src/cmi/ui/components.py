@@ -7,8 +7,8 @@ from typing import Any, Dict, List, Optional
 
 from rich.console import Console, RenderableType
 
-from claude_monitor.terminal.themes import get_cost_style, get_velocity_indicator
-from claude_monitor.ui.layouts import HeaderManager
+from cmi.terminal.themes import get_cost_style, get_velocity_indicator
+from cmi.ui.layouts import HeaderManager
 
 
 class VelocityIndicator:
@@ -175,7 +175,7 @@ class LoadingScreenComponent:
         """
         screen_buffer = self.create_loading_screen(plan, timezone, custom_message)
 
-        from claude_monitor.ui.display_controller import ScreenBufferManager
+        from cmi.ui.display_controller import ScreenBufferManager
 
         buffer_manager = ScreenBufferManager()
         return buffer_manager.create_screen_renderable(screen_buffer)
@@ -236,7 +236,7 @@ class AdvancedCustomLimitDisplay:
         """Check if session hit a general limit."""
         tokens = session["tokens"]
 
-        from claude_monitor.core.plans import (
+        from cmi.core.plans import (
             COMMON_TOKEN_LIMITS,
             LIMIT_DETECTION_THRESHOLD,
         )

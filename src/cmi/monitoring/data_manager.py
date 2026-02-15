@@ -4,8 +4,8 @@ import logging
 import time
 from typing import Any, Dict, Optional
 
-from claude_monitor.data.analysis import analyze_usage
-from claude_monitor.error_handling import report_error
+from cmi.data.analysis import analyze_usage
+from cmi.error_handling import report_error
 
 logger = logging.getLogger(__name__)
 

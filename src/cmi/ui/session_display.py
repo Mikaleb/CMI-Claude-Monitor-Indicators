@@ -9,14 +9,14 @@ from typing import Any, Optional
 
 import pytz
 
-from claude_monitor.ui.components import CostIndicator, VelocityIndicator
-from claude_monitor.ui.layouts import HeaderManager
-from claude_monitor.ui.progress_bars import (
+from cmi.ui.components import CostIndicator, VelocityIndicator
+from cmi.ui.layouts import HeaderManager
+from cmi.ui.progress_bars import (
     ModelUsageBar,
     TimeProgressBar,
     TokenProgressBar,
 )
-from claude_monitor.utils.time_utils import (
+from cmi.utils.time_utils import (
     format_display_time,
     get_time_format_preference,
     percentage,
@@ -70,7 +70,7 @@ class SessionDisplayComponent:
         Returns:
             Formatted progress bar string
         """
-        from claude_monitor.terminal.themes import get_cost_style
+        from cmi.terminal.themes import get_cost_style
 
         if percentage < 50:
             color = "🟢"
@@ -186,7 +186,7 @@ class SessionDisplayComponent:
         screen_buffer.extend(header_manager.create_header(plan, timezone))
 
         if plan in ["custom", "pro", "max5", "max20"]:
-            from claude_monitor.core.plans import DEFAULT_COST_LIMIT
+            from cmi.core.plans import DEFAULT_COST_LIMIT
 
             cost_limit_p90 = kwargs.get("cost_limit_p90", DEFAULT_COST_LIMIT)
             messages_limit_p90 = kwargs.get("messages_limit_p90", 1500)

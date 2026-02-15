@@ -13,18 +13,18 @@ from rich.console import Console, Group, RenderableType
 from rich.live import Live
 from rich.text import Text
 
-from claude_monitor.core.calculations import calculate_hourly_burn_rate
-from claude_monitor.core.models import normalize_model_name
-from claude_monitor.core.plans import Plans
-from claude_monitor.ui.components import (
+from cmi.core.calculations import calculate_hourly_burn_rate
+from cmi.core.models import normalize_model_name
+from cmi.core.plans import Plans
+from cmi.ui.components import (
     AdvancedCustomLimitDisplay,
     ErrorDisplayComponent,
     LoadingScreenComponent,
 )
-from claude_monitor.ui.layouts import ScreenManager
-from claude_monitor.ui.session_display import SessionDisplayComponent
-from claude_monitor.utils.notifications import NotificationManager
-from claude_monitor.utils.time_utils import (
+from cmi.ui.layouts import ScreenManager
+from cmi.ui.session_display import SessionDisplayComponent
+from cmi.utils.notifications import NotificationManager
+from cmi.utils.time_utils import (
     TimezoneHandler,
     format_display_time,
     get_time_format_preference,
@@ -243,7 +243,7 @@ class DisplayController:
             messages_limit_p90 = percentiles["messages"]["p90"]
         else:
             # Use centralized cost limits
-            from claude_monitor.core.plans import get_cost_limit
+            from cmi.core.plans import get_cost_limit
 
             cost_limit_p90 = get_cost_limit(args.plan)
 
@@ -544,7 +544,7 @@ class ScreenBufferManager:
         Returns:
             Rich Group renderable
         """
-        from claude_monitor.terminal.themes import get_themed_console
+        from cmi.terminal.themes import get_themed_console
 
         if self.console is None:
             self.console = get_themed_console()

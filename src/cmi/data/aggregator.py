@@ -10,8 +10,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional
 
-from claude_monitor.core.models import SessionBlock, UsageEntry, normalize_model_name
-from claude_monitor.utils.time_utils import TimezoneHandler
+from cmi.core.models import SessionBlock, UsageEntry, normalize_model_name
+from cmi.utils.time_utils import TimezoneHandler
 
 logger = logging.getLogger(__name__)
 
@@ -272,7 +272,7 @@ class UsageAggregator:
         Returns:
             List of aggregated data based on aggregation_mode
         """
-        from claude_monitor.data.reader import load_usage_entries
+        from cmi.data.reader import load_usage_entries
 
         logger.info(f"Starting aggregation in {self.aggregation_mode} mode")
 

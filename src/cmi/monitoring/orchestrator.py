@@ -5,10 +5,10 @@ import threading
 import time
 from typing import Any, Callable, Dict, List, Optional
 
-from claude_monitor.core.plans import DEFAULT_TOKEN_LIMIT, get_token_limit
-from claude_monitor.error_handling import report_error
-from claude_monitor.monitoring.data_manager import DataManager
-from claude_monitor.monitoring.session_monitor import SessionMonitor
+from cmi.core.plans import DEFAULT_TOKEN_LIMIT, get_token_limit
+from cmi.error_handling import report_error
+from cmi.monitoring.data_manager import DataManager
+from cmi.monitoring.session_monitor import SessionMonitor
 
 logger = logging.getLogger(__name__)
 

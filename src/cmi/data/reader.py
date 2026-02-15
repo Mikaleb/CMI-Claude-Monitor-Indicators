@@ -11,15 +11,15 @@ from datetime import timezone as tz
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from claude_monitor.core.data_processors import (
+from cmi.core.data_processors import (
     DataConverter,
     TimestampProcessor,
     TokenExtractor,
 )
-from claude_monitor.core.models import CostMode, UsageEntry
-from claude_monitor.core.pricing import PricingCalculator
-from claude_monitor.error_handling import report_file_error
-from claude_monitor.utils.time_utils import TimezoneHandler
+from cmi.core.models import CostMode, UsageEntry
+from cmi.core.pricing import PricingCalculator
+from cmi.error_handling import report_file_error
+from cmi.utils.time_utils import TimezoneHandler
 
 FIELD_COST_USD = "cost_usd"
 FIELD_MODEL = "model"

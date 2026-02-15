@@ -12,29 +12,29 @@ from typing import Any, Callable, Dict, List, NoReturn, Optional, Union
 
 from rich.console import Console
 
-from claude_monitor import __version__
-from claude_monitor.cli.bootstrap import (
+from cmi import __version__
+from cmi.cli.bootstrap import (
     ensure_directories,
     init_timezone,
     setup_environment,
     setup_logging,
 )
-from claude_monitor.core.plans import Plans, PlanType, get_token_limit
-from claude_monitor.core.settings import Settings
-from claude_monitor.data.aggregator import UsageAggregator
-from claude_monitor.data.analysis import analyze_usage
-from claude_monitor.error_handling import report_error
-from claude_monitor.monitoring.orchestrator import MonitoringOrchestrator
-from claude_monitor.terminal.manager import (
+from cmi.core.plans import Plans, PlanType, get_token_limit
+from cmi.core.settings import Settings
+from cmi.data.aggregator import UsageAggregator
+from cmi.data.analysis import analyze_usage
+from cmi.error_handling import report_error
+from cmi.monitoring.orchestrator import MonitoringOrchestrator
+from cmi.terminal.manager import (
     enter_alternate_screen,
     handle_cleanup_and_exit,
     handle_error_and_exit,
     restore_terminal,
     setup_terminal,
 )
-from claude_monitor.terminal.themes import get_themed_console, print_themed
-from claude_monitor.ui.display_controller import DisplayController
-from claude_monitor.ui.table_views import TableViewsController
+from cmi.terminal.themes import get_themed_console, print_themed
+from cmi.ui.display_controller import DisplayController
+from cmi.ui.table_views import TableViewsController
 
 # Type aliases for CLI callbacks
 DataUpdateCallback = Callable[[Dict[str, Any]], None]
@@ -330,7 +330,7 @@ def handle_application_error(
     logger.error(f"Application error in {component}: {exception}", exc_info=True)
 
     # Report to error handling system
-    from claude_monitor.error_handling import report_application_startup_error
+    from cmi.error_handling import report_application_startup_error
 
     report_application_startup_error(
         exception=exception,

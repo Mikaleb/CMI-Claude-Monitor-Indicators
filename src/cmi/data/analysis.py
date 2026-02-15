@@ -7,10 +7,10 @@ import logging
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from claude_monitor.core.calculations import BurnRateCalculator
-from claude_monitor.core.models import CostMode, SessionBlock, UsageEntry
-from claude_monitor.data.analyzer import SessionAnalyzer
-from claude_monitor.data.reader import load_usage_entries
+from cmi.core.calculations import BurnRateCalculator
+from cmi.core.models import CostMode, SessionBlock, UsageEntry
+from cmi.data.analyzer import SessionAnalyzer
+from cmi.data.reader import load_usage_entries
 
 logger = logging.getLogger(__name__)
 
