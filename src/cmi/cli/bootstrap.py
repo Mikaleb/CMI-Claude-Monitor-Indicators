@@ -45,10 +45,10 @@ def setup_environment() -> None:
             sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
 
     os.environ.setdefault(
-        "CLAUDE_MONITOR_CONFIG", str(Path.home() / ".claude-monitor" / "config.yaml")
+        "CLAUDE_MONITOR_CONFIG", str(Path.home() / ".cmi" / "config.yaml")
     )
     os.environ.setdefault(
-        "CLAUDE_MONITOR_CACHE_DIR", str(Path.home() / ".claude-monitor" / "cache")
+        "CLAUDE_MONITOR_CACHE_DIR", str(Path.home() / ".cmi" / "cache")
     )
 
 
@@ -70,10 +70,10 @@ def init_timezone(timezone: str = "Europe/Warsaw") -> TimezoneHandler:
 def ensure_directories() -> None:
     """Ensure required directories exist."""
     dirs = [
-        Path.home() / ".claude-monitor",
-        Path.home() / ".claude-monitor" / "cache",
-        Path.home() / ".claude-monitor" / "logs",
-        Path.home() / ".claude-monitor" / "reports",
+        Path.home() / ".cmi",
+        Path.home() / ".cmi" / "cache",
+        Path.home() / ".cmi" / "logs",
+        Path.home() / ".cmi" / "reports",
     ]
 
     for directory in dirs:

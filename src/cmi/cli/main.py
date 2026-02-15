@@ -75,7 +75,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         argv = sys.argv[1:]
 
     if "--version" in argv or "-v" in argv:
-        print(f"claude-monitor {__version__}")
+        print(f"cmi {__version__}")
         return 0
 
     try:

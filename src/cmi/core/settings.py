@@ -21,7 +21,7 @@ class LastUsedParams:
 
     def __init__(self, config_dir: Optional[Path] = None) -> None:
         """Initialize with config directory."""
-        self.config_dir = config_dir or Path.home() / ".claude-monitor"
+        self.config_dir = config_dir or Path.home() / ".cmi"
         self.params_file = self.config_dir / "last_used.json"
 
     def save(self, settings: "Settings") -> None:
@@ -85,7 +85,7 @@ class LastUsedParams:
 
 
 class Settings(BaseSettings):
-    """claude-monitor - Real-time token usage monitoring for Claude AI"""
+    """cmi - Real-time token usage monitoring for Claude AI"""
 
     model_config = SettingsConfigDict(
         env_file=None,
@@ -94,7 +94,7 @@ class Settings(BaseSettings):
         validate_default=True,
         extra="ignore",
         cli_parse_args=True,
-        cli_prog_name="claude-monitor",
+        cli_prog_name="cmi",
         cli_kebab_case=True,
         cli_implicit_flags=True,
     )
@@ -262,7 +262,7 @@ class Settings(BaseSettings):
     def load_with_last_used(cls, argv: Optional[List[str]] = None) -> "Settings":
         """Load settings with last used params support (default behavior)."""
         if argv and "--version" in argv:
-            print(f"claude-monitor {__version__}")
+            print(f"cmi {__version__}")
             import sys
 
             sys.exit(0)
