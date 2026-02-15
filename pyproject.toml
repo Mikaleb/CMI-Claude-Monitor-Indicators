@@ -5,7 +5,7 @@ requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "claude-monitor"
+name = "cmi"
 version = "3.1.0"
 description = "A real-time terminal monitoring tool for Claude Code token usage with advanced analytics and Rich UI"
 readme = "README.md"
@@ -83,19 +83,15 @@ changelog = "https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor/blob/m
 "Discussions" = "https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor/discussions"
 
 [project.scripts]
-claude-monitor = "claude_monitor.__main__:main"
-claude-code-monitor = "claude_monitor.__main__:main"
-cmonitor = "claude_monitor.__main__:main"
-ccmonitor = "claude_monitor.__main__:main"
-ccm = "claude_monitor.__main__:main"
+cmi = "cmi.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["claude_monitor*"]
+include = ["cmi*"]
 exclude = ["tests*", "src/tests*"]
 
 [tool.setuptools.package-data]
-claude_monitor = ["py.typed"]
+cmi = ["py.typed"]
 
 [tool.black]
 line-length = 88
@@ -117,7 +113,7 @@ extend-exclude = '''
 [tool.isort]
 profile = "black"
 line_length = 88
-known_first_party = ["claude_monitor"]
+known_first_party = ["cmi"]
 force_single_line = true
 atomic = true
 include_trailing_comma = true
@@ -160,7 +156,7 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = [
   "--strict-markers","--strict-config","--color=yes","--tb=short",
-  "--cov=claude_monitor","--cov-report=term-missing","--cov-report=html",
+  "--cov=cmi","--cov-report=term-missing","--cov-report=html",
   "--cov-report=xml","--cov-fail-under=70","--no-cov-on-fail","-ra","-q",
   "-m","not integration"
 ]
@@ -181,7 +177,7 @@ filterwarnings = [
 
 [tool.coverage.run]
 branch = true
-source = ["src/claude_monitor"]
+source = ["src/cmi"]
 omit = ["*/tests/*","*/test_*","*/__main__.py","*/conftest.py"]
 
 [tool.coverage.report]
