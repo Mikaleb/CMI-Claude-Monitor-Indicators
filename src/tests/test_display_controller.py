@@ -790,9 +790,7 @@ class TestDisplayControllerAdvanced:
 
         current_time = datetime(2024, 1, 1, 12, 30, tzinfo=timezone.utc)
 
-        with patch(
-            "cmi.ui.display_controller.calculate_hourly_burn_rate"
-        ) as mock_burn:
+        with patch("cmi.ui.display_controller.calculate_hourly_burn_rate") as mock_burn:
             mock_burn.return_value = 5.5
 
             with patch.object(

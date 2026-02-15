@@ -321,9 +321,7 @@ class TestFormattingAdvanced:
 
         # Test with mock args
         mock_args = Mock()
-        with patch(
-            "cmi.utils.formatting.get_time_format_preference"
-        ) as mock_pref:
+        with patch("cmi.utils.formatting.get_time_format_preference") as mock_pref:
             mock_pref.return_value = True
             result = _get_pref(mock_args)
             assert result is True

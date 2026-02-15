@@ -426,9 +426,7 @@ class TestMonitoringOrchestratorFetchAndProcess:
         """Test fetch and process handles exceptions."""
         orchestrator.data_manager.get_data.side_effect = Exception("Fetch failed")
 
-        with patch(
-            "cmi.monitoring.orchestrator.report_error"
-        ) as mock_report:
+        with patch("cmi.monitoring.orchestrator.report_error") as mock_report:
             result = orchestrator._fetch_and_process_data()
 
         assert result is None
@@ -683,9 +681,7 @@ class TestMonitoringOrchestratorIntegration:
 
         orchestrator.data_manager.get_data.side_effect = mock_get_data
 
-        with patch(
-            "cmi.monitoring.orchestrator.report_error"
-        ) as mock_report:
+        with patch("cmi.monitoring.orchestrator.report_error") as mock_report:
             # First call should fail
             result1 = orchestrator._fetch_and_process_data()
             assert result1 is None

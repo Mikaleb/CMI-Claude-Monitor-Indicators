@@ -167,9 +167,7 @@ class TestReportError:
     def test_report_error_none_exception(self) -> None:
         """Test error reporting with None exception."""
         # Should handle gracefully without crashing
-        with patch(
-            "cmi.error_handling.logging.getLogger"
-        ) as mock_get_logger:
+        with patch("cmi.error_handling.logging.getLogger") as mock_get_logger:
             mock_logger = Mock()
             mock_get_logger.return_value = mock_logger
 
@@ -180,9 +178,7 @@ class TestReportError:
 
     def test_report_error_empty_component(self, sample_exception: ValueError) -> None:
         """Test error reporting with empty component name."""
-        with patch(
-            "cmi.error_handling.logging.getLogger"
-        ) as mock_get_logger:
+        with patch("cmi.error_handling.logging.getLogger") as mock_get_logger:
             mock_logger = Mock()
             mock_get_logger.return_value = mock_logger
 

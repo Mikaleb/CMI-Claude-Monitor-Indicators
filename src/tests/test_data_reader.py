@@ -299,9 +299,7 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
-            patch(
-                "cmi.data.reader._should_process_entry", return_value=True
-            ),
+            patch("cmi.data.reader._should_process_entry", return_value=True),
             patch(
                 "cmi.data.reader._map_to_usage_entry",
                 return_value=sample_entry,
@@ -341,9 +339,7 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
-            patch(
-                "cmi.data.reader._should_process_entry", return_value=True
-            ),
+            patch("cmi.data.reader._should_process_entry", return_value=True),
             patch(
                 "cmi.data.reader._map_to_usage_entry",
                 return_value=sample_entry,
@@ -372,9 +368,7 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
-            patch(
-                "cmi.data.reader._should_process_entry", return_value=False
-            ),
+            patch("cmi.data.reader._should_process_entry", return_value=False),
         ):
             entries, raw_data = _process_single_file(
                 test_file,
@@ -397,9 +391,7 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
-            patch(
-                "cmi.data.reader._should_process_entry", return_value=True
-            ),
+            patch("cmi.data.reader._should_process_entry", return_value=True),
             patch("cmi.data.reader._map_to_usage_entry", return_value=None),
         ):
             entries, raw_data = _process_single_file(
@@ -444,9 +436,7 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
-            patch(
-                "cmi.data.reader._should_process_entry", return_value=True
-            ),
+            patch("cmi.data.reader._should_process_entry", return_value=True),
             patch("cmi.data.reader._map_to_usage_entry", return_value=None),
         ):
             entries, raw_data = _process_single_file(
@@ -475,9 +465,7 @@ class TestShouldProcessEntry:
     ) -> None:
         data = {"timestamp": "2024-01-01T12:00:00Z", "message_id": "msg_1"}
 
-        with patch(
-            "cmi.data.reader._create_unique_hash", return_value="hash_1"
-        ):
+        with patch("cmi.data.reader._create_unique_hash", return_value="hash_1"):
             result = _should_process_entry(data, None, set(), timezone_handler)
 
         assert result is True
@@ -488,18 +476,14 @@ class TestShouldProcessEntry:
         data = {"timestamp": "2024-01-01T12:00:00Z"}
         cutoff_time = datetime(2024, 1, 1, 10, 0, tzinfo=timezone.utc)
 
-        with patch(
-            "cmi.data.reader.TimestampProcessor"
-        ) as mock_processor_class:
+        with patch("cmi.data.reader.TimestampProcessor") as mock_processor_class:
             mock_processor = Mock()
             mock_processor.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
             )
             mock_processor_class.return_value = mock_processor
 
-            with patch(
-                "cmi.data.reader._create_unique_hash", return_value="hash_1"
-            ):
+            with patch("cmi.data.reader._create_unique_hash", return_value="hash_1"):
                 result = _should_process_entry(
                     data, cutoff_time, set(), timezone_handler
                 )
@@ -510,9 +494,7 @@ class TestShouldProcessEntry:
         data = {"timestamp": "2024-01-01T08:00:00Z"}
         cutoff_time = datetime(2024, 1, 1, 10, 0, tzinfo=timezone.utc)
 
-        with patch(
-            "cmi.data.reader.TimestampProcessor"
-        ) as mock_processor_class:
+        with patch("cmi.data.reader.TimestampProcessor") as mock_processor_class:
             mock_processor = Mock()
             mock_processor.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 8, 0, tzinfo=timezone.utc
@@ -527,9 +509,7 @@ class TestShouldProcessEntry:
         data = {"message_id": "msg_1", "request_id": "req_1"}
         processed_hashes = {"msg_1:req_1"}
 
-        with patch(
-            "cmi.data.reader._create_unique_hash", return_value="msg_1:req_1"
-        ):
+        with patch("cmi.data.reader._create_unique_hash", return_value="msg_1:req_1"):
             result = _should_process_entry(
                 data, None, processed_hashes, timezone_handler
             )
@@ -540,9 +520,7 @@ class TestShouldProcessEntry:
         data = {"message_id": "msg_1"}
         cutoff_time = datetime(2024, 1, 1, 10, 0, tzinfo=timezone.utc)
 
-        with patch(
-            "cmi.data.reader._create_unique_hash", return_value="hash_1"
-        ):
+        with patch("cmi.data.reader._create_unique_hash", return_value="hash_1"):
             result = _should_process_entry(data, cutoff_time, set(), timezone_handler)
 
         assert result is True
@@ -558,9 +536,7 @@ class TestShouldProcessEntry:
             mock_processor.parse_timestamp.return_value = None
             mock_processor_class.return_value = mock_processor
 
-            with patch(
-                "cmi.data.reader._create_unique_hash", return_value="hash_1"
-            ):
+            with patch("cmi.data.reader._create_unique_hash", return_value="hash_1"):
                 result = _should_process_entry(
                     data, cutoff_time, set(), timezone_handler
                 )
@@ -663,18 +639,14 @@ class TestMapToUsageEntry:
             "cost": 0.001,
         }
 
-        with patch(
-            "cmi.data.reader.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.data.reader.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
             )
             mock_ts_processor.return_value = mock_ts
 
-            with patch(
-                "cmi.data.reader.TokenExtractor"
-            ) as mock_token_extractor:
+            with patch("cmi.data.reader.TokenExtractor") as mock_token_extractor:
                 mock_token_extractor.extract_tokens.return_value = {
                     "input_tokens": 100,
                     "output_tokens": 50,
@@ -683,9 +655,7 @@ class TestMapToUsageEntry:
                     "total_tokens": 150,
                 }
 
-                with patch(
-                    "cmi.data.reader.DataConverter"
-                ) as mock_data_converter:
+                with patch("cmi.data.reader.DataConverter") as mock_data_converter:
                     mock_data_converter.extract_model_name.return_value = (
                         "claude-3-haiku"
                     )
@@ -714,9 +684,7 @@ class TestMapToUsageEntry:
 
         data = {"input_tokens": 100, "output_tokens": 50}
 
-        with patch(
-            "cmi.core.data_processors.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.core.data_processors.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = None
             mock_ts_processor.return_value = mock_ts
@@ -732,9 +700,7 @@ class TestMapToUsageEntry:
 
         data = {"timestamp": "2024-01-01T12:00:00Z"}
 
-        with patch(
-            "cmi.core.data_processors.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.core.data_processors.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
@@ -784,9 +750,7 @@ class TestMapToUsageEntry:
             "output_tokens": 50,
         }
 
-        with patch(
-            "cmi.core.data_processors.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.core.data_processors.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
@@ -1080,9 +1044,7 @@ class TestPerformanceAndEdgeCases:
                     '{"timestamp": "2024-01-01T12:00:00Z", "input_tokens": 100, "output_tokens": 50}\n'
                 )
 
-            with patch(
-                "cmi.data.reader._process_single_file"
-            ) as mock_process:
+            with patch("cmi.data.reader._process_single_file") as mock_process:
                 mock_process.return_value = (
                     [],
                     None,
@@ -1182,9 +1144,7 @@ class TestUsageEntryMapper:
         """Test UsageEntryMapper._extract_timestamp method."""
         mapper, timezone_handler, _ = mapper_components
 
-        with patch(
-            "cmi.data.reader.TimestampProcessor"
-        ) as mock_processor_class:
+        with patch("cmi.data.reader.TimestampProcessor") as mock_processor_class:
             mock_processor = Mock()
             expected_timestamp = datetime(2024, 1, 1, 12, 0, tzinfo=timezone.utc)
             mock_processor.parse_timestamp.return_value = expected_timestamp
@@ -1279,9 +1239,7 @@ class TestAdditionalEdgeCases:
 
         # Test with empty processed_hashes set
         data = {"message_id": "msg_1", "request_id": "req_1"}
-        with patch(
-            "cmi.data.reader._create_unique_hash", return_value="msg_1:req_1"
-        ):
+        with patch("cmi.data.reader._create_unique_hash", return_value="msg_1:req_1"):
             result = _should_process_entry(data, None, set(), timezone_handler)
         assert result is True
 
@@ -1308,9 +1266,7 @@ class TestAdditionalEdgeCases:
             "output_tokens": 50,
         }
 
-        with patch(
-            "cmi.core.data_processors.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.core.data_processors.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
