@@ -37,13 +37,13 @@ Current implementation status and planned features for Claude Code Usage Monitor
 
 #### 📦 **Package Distribution**
 - **PyPI-ready** with modern setuptools configuration
-- **Entry points**: `claude-monitor`, `cmonitor`, and `ccm` commands
+- **Entry points**: `cmi`, `cm`, and `ccm` commands
 - **Cross-platform support** (Windows, macOS, Linux)
 - **Professional CI/CD** with automated testing and releases
 
 **📋 Command Aliases**:
-- `claude-monitor` - Main command (full name)
-- `cmonitor` - Short alias for convenience
+- `cmi` - Main command (full name)
+- `cm` - Short alias for convenience
 - `ccm` - Ultra-short alias for power users
 
 #### 🛠️ **Development Infrastructure**
@@ -66,13 +66,13 @@ Container-based deployment with optional web dashboard for team environments.
 **🚀 Container Deployment**:
 ```bash
 # Lightweight monitoring
-docker run -e PLAN=max5 maciek/claude-monitor
+docker run -e PLAN=max5 maciek/cmi
 
 # With web dashboard
-docker run -p 8080:8080 maciek/claude-monitor --web-mode
+docker run -p 8080:8080 maciek/cmi --web-mode
 
 # Persistent data
-docker run -v ~/.claude_monitor:/data maciek/claude-monitor
+docker run -v ~/.cmi:/data maciek/cmi
 ```
 
 **📊 Web Dashboard**:
