@@ -44,7 +44,7 @@ source venv/bin/activate  # Linux/Mac
 pip install -e .[dev]
 
 # Make script executable (Linux/Mac)
-chmod +x claude_monitor.py
+chmod +x cmi
 ```
 
 ### 3. Create a Feature Branch
@@ -120,7 +120,7 @@ def predict_token_depletion(current_usage, burn_rate):
 # tests/test_core.py
 
 import pytest
-from claude_monitor.core import TokenMonitor
+from cmi.core import TokenMonitor
 
 def test_token_calculation():
     """Test token usage calculation."""
@@ -318,7 +318,7 @@ pytest
 pytest tests/test_core.py
 
 # Run with coverage
-pytest --cov=claude_monitor
+pytest --cov=cmi
 
 # Run tests on multiple Python versions (if using tox)
 tox

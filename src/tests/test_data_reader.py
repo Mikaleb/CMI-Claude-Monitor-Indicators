@@ -14,9 +14,9 @@ from unittest.mock import Mock, mock_open, patch
 
 import pytest
 
-from claude_monitor.core.models import CostMode, UsageEntry
-from claude_monitor.core.pricing import PricingCalculator
-from claude_monitor.data.reader import (
+from cmi.core.models import CostMode, UsageEntry
+from cmi.core.pricing import PricingCalculator
+from cmi.data.reader import (
     _create_unique_hash,
     _find_jsonl_files,
     _map_to_usage_entry,
@@ -26,14 +26,14 @@ from claude_monitor.data.reader import (
     load_all_raw_entries,
     load_usage_entries,
 )
-from claude_monitor.utils.time_utils import TimezoneHandler
+from cmi.utils.time_utils import TimezoneHandler
 
 
 class TestLoadUsageEntries:
     """Test the main load_usage_entries function."""
 
-    @patch("claude_monitor.data.reader._find_jsonl_files")
-    @patch("claude_monitor.data.reader._process_single_file")
+    @patch("cmi.data.reader._find_jsonl_files")
+    @patch("cmi.data.reader._process_single_file")
     def test_load_usage_entries_basic(
         self, mock_process_file: Mock, mock_find_files: Mock
     ) -> None:
@@ -69,7 +69,7 @@ class TestLoadUsageEntries:
         mock_find_files.assert_called_once()
         assert mock_process_file.call_count == 2
 
-    @patch("claude_monitor.data.reader._find_jsonl_files")
+    @patch("cmi.data.reader._find_jsonl_files")
     def test_load_usage_entries_no_files(self, mock_find_files: Mock) -> None:
         mock_find_files.return_value = []
 
@@ -78,8 +78,8 @@ class TestLoadUsageEntries:
         assert entries == []
         assert raw_data is None
 
-    @patch("claude_monitor.data.reader._find_jsonl_files")
-    @patch("claude_monitor.data.reader._process_single_file")
+    @patch("cmi.data.reader._find_jsonl_files")
+    @patch("cmi.data.reader._process_single_file")
     def test_load_usage_entries_without_raw(
         self, mock_process_file: Mock, mock_find_files: Mock
     ) -> None:
@@ -99,8 +99,8 @@ class TestLoadUsageEntries:
         assert len(entries) == 1
         assert raw_data is None
 
-    @patch("claude_monitor.data.reader._find_jsonl_files")
-    @patch("claude_monitor.data.reader._process_single_file")
+    @patch("cmi.data.reader._find_jsonl_files")
+    @patch("cmi.data.reader._process_single_file")
     def test_load_usage_entries_sorting(
         self, mock_process_file: Mock, mock_find_files: Mock
     ) -> None:
@@ -127,15 +127,15 @@ class TestLoadUsageEntries:
         assert entries[0] == entry2
         assert entries[1] == entry1
 
-    @patch("claude_monitor.data.reader._find_jsonl_files")
-    @patch("claude_monitor.data.reader._process_single_file")
+    @patch("cmi.data.reader._find_jsonl_files")
+    @patch("cmi.data.reader._process_single_file")
     def test_load_usage_entries_with_cutoff_time(
         self, mock_process_file: Mock, mock_find_files: Mock
     ) -> None:
         mock_find_files.return_value = [Path("/test/file1.jsonl")]
         mock_process_file.return_value = ([], None)
 
-        with patch("claude_monitor.data.reader.datetime") as mock_datetime:
+        with patch("cmi.data.reader.datetime") as mock_datetime:
             current_time = datetime(2024, 1, 1, 12, 0, tzinfo=timezone.utc)
             mock_datetime.now.return_value = current_time
 
@@ -147,7 +147,7 @@ class TestLoadUsageEntries:
             assert call_args[2] == expected_cutoff
 
     def test_load_usage_entries_default_path(self) -> None:
-        with patch("claude_monitor.data.reader._find_jsonl_files") as mock_find:
+        with patch("cmi.data.reader._find_jsonl_files") as mock_find:
             mock_find.return_value = []
 
             load_usage_entries()
@@ -160,7 +160,7 @@ class TestLoadUsageEntries:
 class TestLoadAllRawEntries:
     """Test the load_all_raw_entries function."""
 
-    @patch("claude_monitor.data.reader._find_jsonl_files")
+    @patch("cmi.data.reader._find_jsonl_files")
     def test_load_all_raw_entries_basic(self, mock_find_files: Mock) -> None:
         test_file = Path("/test/file.jsonl")
         mock_find_files.return_value = [test_file]
@@ -178,7 +178,7 @@ class TestLoadAllRawEntries:
         assert len(result) == 2
         assert result == raw_data
 
-    @patch("claude_monitor.data.reader._find_jsonl_files")
+    @patch("cmi.data.reader._find_jsonl_files")
     def test_load_all_raw_entries_with_empty_lines(self, mock_find_files: Mock) -> None:
         test_file = Path("/test/file.jsonl")
         mock_find_files.return_value = [test_file]
@@ -192,7 +192,7 @@ class TestLoadAllRawEntries:
         assert result[0] == {"valid": "data"}
         assert result[1] == {"more": "data"}
 
-    @patch("claude_monitor.data.reader._find_jsonl_files")
+    @patch("cmi.data.reader._find_jsonl_files")
     def test_load_all_raw_entries_with_invalid_json(
         self, mock_find_files: Mock
     ) -> None:
@@ -208,20 +208,20 @@ class TestLoadAllRawEntries:
         assert result[0] == {"valid": "data"}
         assert result[1] == {"more": "data"}
 
-    @patch("claude_monitor.data.reader._find_jsonl_files")
+    @patch("cmi.data.reader._find_jsonl_files")
     def test_load_all_raw_entries_file_error(self, mock_find_files: Mock) -> None:
         test_file = Path("/test/file.jsonl")
         mock_find_files.return_value = [test_file]
 
         with patch("builtins.open", side_effect=OSError("File not found")):
-            with patch("claude_monitor.data.reader.logger") as mock_logger:
+            with patch("cmi.data.reader.logger") as mock_logger:
                 result = load_all_raw_entries("/test/path")
 
         assert result == []
         mock_logger.exception.assert_called()
 
     def test_load_all_raw_entries_default_path(self) -> None:
-        with patch("claude_monitor.data.reader._find_jsonl_files") as mock_find:
+        with patch("cmi.data.reader._find_jsonl_files") as mock_find:
             mock_find.return_value = []
 
             load_all_raw_entries()
@@ -235,7 +235,7 @@ class TestFindJsonlFiles:
     """Test the _find_jsonl_files function."""
 
     def test_find_jsonl_files_nonexistent_path(self) -> None:
-        with patch("claude_monitor.data.reader.logger") as mock_logger:
+        with patch("cmi.data.reader.logger") as mock_logger:
             result = _find_jsonl_files(Path("/nonexistent/path"))
 
         assert result == []
@@ -299,14 +299,12 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
+            patch("cmi.data.reader._should_process_entry", return_value=True),
             patch(
-                "claude_monitor.data.reader._should_process_entry", return_value=True
-            ),
-            patch(
-                "claude_monitor.data.reader._map_to_usage_entry",
+                "cmi.data.reader._map_to_usage_entry",
                 return_value=sample_entry,
             ),
-            patch("claude_monitor.data.reader._update_processed_hashes"),
+            patch("cmi.data.reader._update_processed_hashes"),
         ):
             entries, raw_data = _process_single_file(
                 test_file,
@@ -341,14 +339,12 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
+            patch("cmi.data.reader._should_process_entry", return_value=True),
             patch(
-                "claude_monitor.data.reader._should_process_entry", return_value=True
-            ),
-            patch(
-                "claude_monitor.data.reader._map_to_usage_entry",
+                "cmi.data.reader._map_to_usage_entry",
                 return_value=sample_entry,
             ),
-            patch("claude_monitor.data.reader._update_processed_hashes"),
+            patch("cmi.data.reader._update_processed_hashes"),
         ):
             entries, raw_data = _process_single_file(
                 test_file,
@@ -372,9 +368,7 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
-            patch(
-                "claude_monitor.data.reader._should_process_entry", return_value=False
-            ),
+            patch("cmi.data.reader._should_process_entry", return_value=False),
         ):
             entries, raw_data = _process_single_file(
                 test_file,
@@ -397,10 +391,8 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
-            patch(
-                "claude_monitor.data.reader._should_process_entry", return_value=True
-            ),
-            patch("claude_monitor.data.reader._map_to_usage_entry", return_value=None),
+            patch("cmi.data.reader._should_process_entry", return_value=True),
+            patch("cmi.data.reader._map_to_usage_entry", return_value=None),
         ):
             entries, raw_data = _process_single_file(
                 test_file,
@@ -420,7 +412,7 @@ class TestProcessSingleFile:
         test_file = Path("/test/nonexistent.jsonl")
 
         with patch("builtins.open", side_effect=OSError("File not found")):
-            with patch("claude_monitor.data.reader.report_file_error") as mock_report:
+            with patch("cmi.data.reader.report_file_error") as mock_report:
                 entries, raw_data = _process_single_file(
                     test_file,
                     CostMode.AUTO,
@@ -444,10 +436,8 @@ class TestProcessSingleFile:
 
         with (
             patch("builtins.open", mock_open(read_data=jsonl_content)),
-            patch(
-                "claude_monitor.data.reader._should_process_entry", return_value=True
-            ),
-            patch("claude_monitor.data.reader._map_to_usage_entry", return_value=None),
+            patch("cmi.data.reader._should_process_entry", return_value=True),
+            patch("cmi.data.reader._map_to_usage_entry", return_value=None),
         ):
             entries, raw_data = _process_single_file(
                 test_file,
@@ -475,9 +465,7 @@ class TestShouldProcessEntry:
     ) -> None:
         data = {"timestamp": "2024-01-01T12:00:00Z", "message_id": "msg_1"}
 
-        with patch(
-            "claude_monitor.data.reader._create_unique_hash", return_value="hash_1"
-        ):
+        with patch("cmi.data.reader._create_unique_hash", return_value="hash_1"):
             result = _should_process_entry(data, None, set(), timezone_handler)
 
         assert result is True
@@ -488,18 +476,14 @@ class TestShouldProcessEntry:
         data = {"timestamp": "2024-01-01T12:00:00Z"}
         cutoff_time = datetime(2024, 1, 1, 10, 0, tzinfo=timezone.utc)
 
-        with patch(
-            "claude_monitor.data.reader.TimestampProcessor"
-        ) as mock_processor_class:
+        with patch("cmi.data.reader.TimestampProcessor") as mock_processor_class:
             mock_processor = Mock()
             mock_processor.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
             )
             mock_processor_class.return_value = mock_processor
 
-            with patch(
-                "claude_monitor.data.reader._create_unique_hash", return_value="hash_1"
-            ):
+            with patch("cmi.data.reader._create_unique_hash", return_value="hash_1"):
                 result = _should_process_entry(
                     data, cutoff_time, set(), timezone_handler
                 )
@@ -510,9 +494,7 @@ class TestShouldProcessEntry:
         data = {"timestamp": "2024-01-01T08:00:00Z"}
         cutoff_time = datetime(2024, 1, 1, 10, 0, tzinfo=timezone.utc)
 
-        with patch(
-            "claude_monitor.data.reader.TimestampProcessor"
-        ) as mock_processor_class:
+        with patch("cmi.data.reader.TimestampProcessor") as mock_processor_class:
             mock_processor = Mock()
             mock_processor.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 8, 0, tzinfo=timezone.utc
@@ -527,9 +509,7 @@ class TestShouldProcessEntry:
         data = {"message_id": "msg_1", "request_id": "req_1"}
         processed_hashes = {"msg_1:req_1"}
 
-        with patch(
-            "claude_monitor.data.reader._create_unique_hash", return_value="msg_1:req_1"
-        ):
+        with patch("cmi.data.reader._create_unique_hash", return_value="msg_1:req_1"):
             result = _should_process_entry(
                 data, None, processed_hashes, timezone_handler
             )
@@ -540,9 +520,7 @@ class TestShouldProcessEntry:
         data = {"message_id": "msg_1"}
         cutoff_time = datetime(2024, 1, 1, 10, 0, tzinfo=timezone.utc)
 
-        with patch(
-            "claude_monitor.data.reader._create_unique_hash", return_value="hash_1"
-        ):
+        with patch("cmi.data.reader._create_unique_hash", return_value="hash_1"):
             result = _should_process_entry(data, cutoff_time, set(), timezone_handler)
 
         assert result is True
@@ -552,15 +530,13 @@ class TestShouldProcessEntry:
         cutoff_time = datetime(2024, 1, 1, 10, 0, tzinfo=timezone.utc)
 
         with patch(
-            "claude_monitor.core.data_processors.TimestampProcessor"
+            "cmi.core.data_processors.TimestampProcessor"
         ) as mock_processor_class:
             mock_processor = Mock()
             mock_processor.parse_timestamp.return_value = None
             mock_processor_class.return_value = mock_processor
 
-            with patch(
-                "claude_monitor.data.reader._create_unique_hash", return_value="hash_1"
-            ):
+            with patch("cmi.data.reader._create_unique_hash", return_value="hash_1"):
                 result = _should_process_entry(
                     data, cutoff_time, set(), timezone_handler
                 )
@@ -616,7 +592,7 @@ class TestUpdateProcessedHashes:
         processed_hashes = set()
 
         with patch(
-            "claude_monitor.data.reader._create_unique_hash",
+            "cmi.data.reader._create_unique_hash",
             return_value="msg_123:req_456",
         ):
             _update_processed_hashes(data, processed_hashes)
@@ -627,7 +603,7 @@ class TestUpdateProcessedHashes:
         data = {"some": "data"}
         processed_hashes = set()
 
-        with patch("claude_monitor.data.reader._create_unique_hash", return_value=None):
+        with patch("cmi.data.reader._create_unique_hash", return_value=None):
             _update_processed_hashes(data, processed_hashes)
 
         assert len(processed_hashes) == 0
@@ -663,18 +639,14 @@ class TestMapToUsageEntry:
             "cost": 0.001,
         }
 
-        with patch(
-            "claude_monitor.data.reader.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.data.reader.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
             )
             mock_ts_processor.return_value = mock_ts
 
-            with patch(
-                "claude_monitor.data.reader.TokenExtractor"
-            ) as mock_token_extractor:
+            with patch("cmi.data.reader.TokenExtractor") as mock_token_extractor:
                 mock_token_extractor.extract_tokens.return_value = {
                     "input_tokens": 100,
                     "output_tokens": 50,
@@ -683,9 +655,7 @@ class TestMapToUsageEntry:
                     "total_tokens": 150,
                 }
 
-                with patch(
-                    "claude_monitor.data.reader.DataConverter"
-                ) as mock_data_converter:
+                with patch("cmi.data.reader.DataConverter") as mock_data_converter:
                     mock_data_converter.extract_model_name.return_value = (
                         "claude-3-haiku"
                     )
@@ -714,9 +684,7 @@ class TestMapToUsageEntry:
 
         data = {"input_tokens": 100, "output_tokens": 50}
 
-        with patch(
-            "claude_monitor.core.data_processors.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.core.data_processors.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = None
             mock_ts_processor.return_value = mock_ts
@@ -732,9 +700,7 @@ class TestMapToUsageEntry:
 
         data = {"timestamp": "2024-01-01T12:00:00Z"}
 
-        with patch(
-            "claude_monitor.core.data_processors.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.core.data_processors.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
@@ -742,7 +708,7 @@ class TestMapToUsageEntry:
             mock_ts_processor.return_value = mock_ts
 
             with patch(
-                "claude_monitor.core.data_processors.TokenExtractor"
+                "cmi.core.data_processors.TokenExtractor"
             ) as mock_token_extractor:
                 mock_token_extractor.extract_tokens.return_value = {
                     "input_tokens": 0,
@@ -765,7 +731,7 @@ class TestMapToUsageEntry:
         data = {"timestamp": "2024-01-01T12:00:00Z"}
 
         with patch(
-            "claude_monitor.core.data_processors.TimestampProcessor",
+            "cmi.core.data_processors.TimestampProcessor",
             side_effect=ValueError("Processing error"),
         ):
             result = _map_to_usage_entry(
@@ -784,9 +750,7 @@ class TestMapToUsageEntry:
             "output_tokens": 50,
         }
 
-        with patch(
-            "claude_monitor.core.data_processors.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.core.data_processors.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
@@ -794,7 +758,7 @@ class TestMapToUsageEntry:
             mock_ts_processor.return_value = mock_ts
 
             with patch(
-                "claude_monitor.core.data_processors.TokenExtractor"
+                "cmi.core.data_processors.TokenExtractor"
             ) as mock_token_extractor:
                 mock_token_extractor.extract_tokens.return_value = {
                     "input_tokens": 100,
@@ -805,7 +769,7 @@ class TestMapToUsageEntry:
                 }
 
                 with patch(
-                    "claude_monitor.core.data_processors.DataConverter"
+                    "cmi.core.data_processors.DataConverter"
                 ) as mock_data_converter:
                     mock_data_converter.extract_model_name.return_value = "unknown"
 
@@ -857,7 +821,7 @@ class TestIntegration:
 
             # Mock the data processors since they're external dependencies
             with patch(
-                "claude_monitor.core.data_processors.TimestampProcessor"
+                "cmi.core.data_processors.TimestampProcessor"
             ) as mock_ts_processor:
                 mock_ts = Mock()
                 mock_ts.parse_timestamp.side_effect = [
@@ -867,7 +831,7 @@ class TestIntegration:
                 mock_ts_processor.return_value = mock_ts
 
                 with patch(
-                    "claude_monitor.core.data_processors.TokenExtractor"
+                    "cmi.core.data_processors.TokenExtractor"
                 ) as mock_token_extractor:
                     mock_token_extractor.extract_tokens.side_effect = [
                         {
@@ -885,7 +849,7 @@ class TestIntegration:
                     ]
 
                     with patch(
-                        "claude_monitor.core.data_processors.DataConverter"
+                        "cmi.core.data_processors.DataConverter"
                     ) as mock_data_converter:
                         mock_data_converter.extract_model_name.side_effect = [
                             "claude-3-haiku",
@@ -893,7 +857,7 @@ class TestIntegration:
                         ]
 
                         with patch(
-                            "claude_monitor.core.pricing.PricingCalculator"
+                            "cmi.core.pricing.PricingCalculator"
                         ) as mock_pricing_class:
                             mock_pricing = Mock()
                             mock_pricing.calculate_cost_for_entry.side_effect = [
@@ -940,7 +904,7 @@ class TestIntegration:
                 )
 
             with patch(
-                "claude_monitor.core.data_processors.TimestampProcessor"
+                "cmi.core.data_processors.TimestampProcessor"
             ) as mock_ts_processor:
                 mock_ts = Mock()
                 mock_ts.parse_timestamp.side_effect = [
@@ -950,7 +914,7 @@ class TestIntegration:
                 mock_ts_processor.return_value = mock_ts
 
                 with patch(
-                    "claude_monitor.core.data_processors.TokenExtractor"
+                    "cmi.core.data_processors.TokenExtractor"
                 ) as mock_token_extractor:
                     mock_token_extractor.extract_tokens.side_effect = [
                         {
@@ -968,7 +932,7 @@ class TestIntegration:
                     ]
 
                     with patch(
-                        "claude_monitor.core.data_processors.DataConverter"
+                        "cmi.core.data_processors.DataConverter"
                     ) as mock_data_converter:
                         mock_data_converter.extract_model_name.side_effect = [
                             "unknown",
@@ -976,7 +940,7 @@ class TestIntegration:
                         ]
 
                         with patch(
-                            "claude_monitor.core.pricing.PricingCalculator"
+                            "cmi.core.pricing.PricingCalculator"
                         ) as mock_pricing_class:
                             mock_pricing = Mock()
                             mock_pricing.calculate_cost_for_entry.side_effect = [
@@ -1017,7 +981,7 @@ class TestPerformanceAndEdgeCases:
                     f.write(json.dumps(entry) + "\n")
 
             with patch(
-                "claude_monitor.core.data_processors.TimestampProcessor"
+                "cmi.core.data_processors.TimestampProcessor"
             ) as mock_ts_processor:
                 mock_ts = Mock()
                 mock_ts.parse_timestamp.side_effect = [
@@ -1027,7 +991,7 @@ class TestPerformanceAndEdgeCases:
                 mock_ts_processor.return_value = mock_ts
 
                 with patch(
-                    "claude_monitor.core.data_processors.TokenExtractor"
+                    "cmi.core.data_processors.TokenExtractor"
                 ) as mock_token_extractor:
                     mock_token_extractor.extract_tokens.side_effect = [
                         {
@@ -1040,14 +1004,14 @@ class TestPerformanceAndEdgeCases:
                     ]
 
                     with patch(
-                        "claude_monitor.core.data_processors.DataConverter"
+                        "cmi.core.data_processors.DataConverter"
                     ) as mock_data_converter:
                         mock_data_converter.extract_model_name.return_value = (
                             "claude-3-haiku"
                         )
 
                         with patch(
-                            "claude_monitor.core.pricing.PricingCalculator"
+                            "cmi.core.pricing.PricingCalculator"
                         ) as mock_pricing_class:
                             mock_pricing = Mock()
                             mock_pricing.calculate_cost_for_entry.return_value = 0.001
@@ -1080,9 +1044,7 @@ class TestPerformanceAndEdgeCases:
                     '{"timestamp": "2024-01-01T12:00:00Z", "input_tokens": 100, "output_tokens": 50}\n'
                 )
 
-            with patch(
-                "claude_monitor.data.reader._process_single_file"
-            ) as mock_process:
+            with patch("cmi.data.reader._process_single_file") as mock_process:
                 mock_process.return_value = (
                     [],
                     None,
@@ -1108,7 +1070,7 @@ class TestUsageEntryMapper:
         pricing_calculator = Mock(spec=PricingCalculator)
 
         # Import after mocking to avoid import issues
-        from claude_monitor.data.reader import UsageEntryMapper
+        from cmi.data.reader import UsageEntryMapper
 
         mapper = UsageEntryMapper(pricing_calculator, timezone_handler)
 
@@ -1138,7 +1100,7 @@ class TestUsageEntryMapper:
             "request_id": "req_1",
         }
 
-        with patch("claude_monitor.data.reader._map_to_usage_entry") as mock_map:
+        with patch("cmi.data.reader._map_to_usage_entry") as mock_map:
             expected_entry = UsageEntry(
                 timestamp=datetime(2024, 1, 1, 12, 0, tzinfo=timezone.utc),
                 input_tokens=100,
@@ -1160,7 +1122,7 @@ class TestUsageEntryMapper:
 
         data = {"invalid": "data"}
 
-        with patch("claude_monitor.data.reader._map_to_usage_entry", return_value=None):
+        with patch("cmi.data.reader._map_to_usage_entry", return_value=None):
             result = mapper.map(data, CostMode.AUTO)
 
             assert result is None
@@ -1182,9 +1144,7 @@ class TestUsageEntryMapper:
         """Test UsageEntryMapper._extract_timestamp method."""
         mapper, timezone_handler, _ = mapper_components
 
-        with patch(
-            "claude_monitor.data.reader.TimestampProcessor"
-        ) as mock_processor_class:
+        with patch("cmi.data.reader.TimestampProcessor") as mock_processor_class:
             mock_processor = Mock()
             expected_timestamp = datetime(2024, 1, 1, 12, 0, tzinfo=timezone.utc)
             mock_processor.parse_timestamp.return_value = expected_timestamp
@@ -1202,7 +1162,7 @@ class TestUsageEntryMapper:
         """Test UsageEntryMapper._extract_model method."""
         mapper, _, _ = mapper_components
 
-        with patch("claude_monitor.data.reader.DataConverter") as mock_converter:
+        with patch("cmi.data.reader.DataConverter") as mock_converter:
             mock_converter.extract_model_name.return_value = "claude-3-haiku"
 
             data = {"model": "claude-3-haiku"}
@@ -1273,15 +1233,13 @@ class TestAdditionalEdgeCases:
 
         # Test with None cutoff_time and no hash
         data = {"some": "data"}
-        with patch("claude_monitor.data.reader._create_unique_hash", return_value=None):
+        with patch("cmi.data.reader._create_unique_hash", return_value=None):
             result = _should_process_entry(data, None, set(), timezone_handler)
         assert result is True
 
         # Test with empty processed_hashes set
         data = {"message_id": "msg_1", "request_id": "req_1"}
-        with patch(
-            "claude_monitor.data.reader._create_unique_hash", return_value="msg_1:req_1"
-        ):
+        with patch("cmi.data.reader._create_unique_hash", return_value="msg_1:req_1"):
             result = _should_process_entry(data, None, set(), timezone_handler)
         assert result is True
 
@@ -1293,7 +1251,7 @@ class TestAdditionalEdgeCases:
         # Test with missing timestamp processor import error
         data = {"timestamp": "2024-01-01T12:00:00Z"}
         with patch(
-            "claude_monitor.core.data_processors.TimestampProcessor",
+            "cmi.core.data_processors.TimestampProcessor",
             side_effect=AttributeError("Module not found"),
         ):
             result = _map_to_usage_entry(
@@ -1308,9 +1266,7 @@ class TestAdditionalEdgeCases:
             "output_tokens": 50,
         }
 
-        with patch(
-            "claude_monitor.core.data_processors.TimestampProcessor"
-        ) as mock_ts_processor:
+        with patch("cmi.core.data_processors.TimestampProcessor") as mock_ts_processor:
             mock_ts = Mock()
             mock_ts.parse_timestamp.return_value = datetime(
                 2024, 1, 1, 12, 0, tzinfo=timezone.utc
@@ -1318,7 +1274,7 @@ class TestAdditionalEdgeCases:
             mock_ts_processor.return_value = mock_ts
 
             with patch(
-                "claude_monitor.core.data_processors.TokenExtractor"
+                "cmi.core.data_processors.TokenExtractor"
             ) as mock_token_extractor:
                 mock_token_extractor.extract_tokens.return_value = {
                     "input_tokens": 100,
@@ -1328,7 +1284,7 @@ class TestAdditionalEdgeCases:
                 }
 
                 with patch(
-                    "claude_monitor.core.data_processors.DataConverter"
+                    "cmi.core.data_processors.DataConverter"
                 ) as mock_data_converter:
                     mock_data_converter.extract_model_name.return_value = (
                         "claude-3-haiku"
@@ -1367,7 +1323,7 @@ class TestAdditionalEdgeCases:
                 f.writelines(json.dumps(item) + "\n" for item in test_data)
 
             with patch(
-                "claude_monitor.core.data_processors.TimestampProcessor"
+                "cmi.core.data_processors.TimestampProcessor"
             ) as mock_ts_processor:
                 mock_ts = Mock()
                 mock_ts.parse_timestamp.side_effect = [
@@ -1377,7 +1333,7 @@ class TestAdditionalEdgeCases:
                 mock_ts_processor.return_value = mock_ts
 
                 with patch(
-                    "claude_monitor.core.data_processors.TokenExtractor"
+                    "cmi.core.data_processors.TokenExtractor"
                 ) as mock_token_extractor:
                     mock_token_extractor.extract_tokens.side_effect = [
                         {
@@ -1395,14 +1351,14 @@ class TestAdditionalEdgeCases:
                     ]
 
                     with patch(
-                        "claude_monitor.core.data_processors.DataConverter"
+                        "cmi.core.data_processors.DataConverter"
                     ) as mock_data_converter:
                         mock_data_converter.extract_model_name.return_value = (
                             "claude-3-haiku"
                         )
 
                         with patch(
-                            "claude_monitor.core.pricing.PricingCalculator"
+                            "cmi.core.pricing.PricingCalculator"
                         ) as mock_pricing_class:
                             mock_pricing = Mock()
                             mock_pricing.calculate_cost_for_entry.return_value = 0.001
@@ -1458,7 +1414,7 @@ class TestAdditionalEdgeCases:
 
             for mode in [CostMode.AUTO, CostMode.CALCULATED, CostMode.CACHED]:
                 with patch(
-                    "claude_monitor.core.data_processors.TimestampProcessor"
+                    "cmi.core.data_processors.TimestampProcessor"
                 ) as mock_ts_processor:
                     mock_ts = Mock()
                     mock_ts.parse_timestamp.return_value = datetime(
@@ -1467,7 +1423,7 @@ class TestAdditionalEdgeCases:
                     mock_ts_processor.return_value = mock_ts
 
                     with patch(
-                        "claude_monitor.core.data_processors.TokenExtractor"
+                        "cmi.core.data_processors.TokenExtractor"
                     ) as mock_token_extractor:
                         mock_token_extractor.extract_tokens.return_value = {
                             "input_tokens": 100,
@@ -1477,14 +1433,14 @@ class TestAdditionalEdgeCases:
                         }
 
                         with patch(
-                            "claude_monitor.core.data_processors.DataConverter"
+                            "cmi.core.data_processors.DataConverter"
                         ) as mock_data_converter:
                             mock_data_converter.extract_model_name.return_value = (
                                 "claude-3-haiku"
                             )
 
                             with patch(
-                                "claude_monitor.data.reader.PricingCalculator"
+                                "cmi.data.reader.PricingCalculator"
                             ) as mock_pricing_class:
                                 mock_pricing = Mock()
                                 mock_pricing.calculate_cost_for_entry.return_value = (
@@ -1506,7 +1462,7 @@ class TestDataProcessors:
 
     def test_timestamp_processor_init(self):
         """Test TimestampProcessor initialization."""
-        from claude_monitor.core.data_processors import TimestampProcessor
+        from cmi.core.data_processors import TimestampProcessor
 
         # Test with default timezone handler
         processor = TimestampProcessor()
@@ -1519,7 +1475,7 @@ class TestDataProcessors:
 
     def test_timestamp_processor_parse_datetime(self):
         """Test parsing datetime objects."""
-        from claude_monitor.core.data_processors import TimestampProcessor
+        from cmi.core.data_processors import TimestampProcessor
 
         processor = TimestampProcessor()
         dt = datetime(2024, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
@@ -1533,7 +1489,7 @@ class TestDataProcessors:
 
     def test_timestamp_processor_parse_string_iso(self):
         """Test parsing ISO format strings."""
-        from claude_monitor.core.data_processors import TimestampProcessor
+        from cmi.core.data_processors import TimestampProcessor
 
         processor = TimestampProcessor()
 
@@ -1551,7 +1507,7 @@ class TestDataProcessors:
 
     def test_timestamp_processor_parse_string_fallback(self):
         """Test parsing strings with fallback formats."""
-        from claude_monitor.core.data_processors import TimestampProcessor
+        from cmi.core.data_processors import TimestampProcessor
 
         processor = TimestampProcessor()
 
@@ -1566,7 +1522,7 @@ class TestDataProcessors:
 
     def test_timestamp_processor_parse_numeric(self):
         """Test parsing numeric timestamps."""
-        from claude_monitor.core.data_processors import TimestampProcessor
+        from cmi.core.data_processors import TimestampProcessor
 
         processor = TimestampProcessor()
 
@@ -1584,7 +1540,7 @@ class TestDataProcessors:
 
     def test_timestamp_processor_parse_invalid(self):
         """Test parsing invalid timestamps."""
-        from claude_monitor.core.data_processors import TimestampProcessor
+        from cmi.core.data_processors import TimestampProcessor
 
         processor = TimestampProcessor()
 
@@ -1599,7 +1555,7 @@ class TestDataProcessors:
 
     def test_token_extractor_basic_extraction(self):
         """Test basic token extraction."""
-        from claude_monitor.core.data_processors import TokenExtractor
+        from cmi.core.data_processors import TokenExtractor
 
         # Test direct token fields
         data = {
@@ -1619,7 +1575,7 @@ class TestDataProcessors:
 
     def test_token_extractor_usage_field(self):
         """Test extraction from usage field."""
-        from claude_monitor.core.data_processors import TokenExtractor
+        from cmi.core.data_processors import TokenExtractor
 
         data = {"usage": {"input_tokens": 200, "output_tokens": 100}}
 
@@ -1631,7 +1587,7 @@ class TestDataProcessors:
 
     def test_token_extractor_message_usage(self):
         """Test extraction from message.usage field."""
-        from claude_monitor.core.data_processors import TokenExtractor
+        from cmi.core.data_processors import TokenExtractor
 
         data = {
             "message": {
@@ -1652,7 +1608,7 @@ class TestDataProcessors:
 
     def test_token_extractor_empty_data(self):
         """Test extraction from empty data."""
-        from claude_monitor.core.data_processors import TokenExtractor
+        from cmi.core.data_processors import TokenExtractor
 
         result = TokenExtractor.extract_tokens({})
 
@@ -1664,7 +1620,7 @@ class TestDataProcessors:
 
     def test_data_converter_extract_model_name(self):
         """Test model name extraction."""
-        from claude_monitor.core.data_processors import DataConverter
+        from cmi.core.data_processors import DataConverter
 
         # Test direct model field
         data = {"model": "claude-3-opus"}
@@ -1690,7 +1646,7 @@ class TestDataProcessors:
 
     def test_data_converter_flatten_nested_dict(self):
         """Test nested dictionary flattening."""
-        from claude_monitor.core.data_processors import DataConverter
+        from cmi.core.data_processors import DataConverter
 
         # Test simple nested dict
         data = {
@@ -1711,7 +1667,7 @@ class TestDataProcessors:
 
     def test_data_converter_flatten_with_prefix(self):
         """Test flattening with custom prefix."""
-        from claude_monitor.core.data_processors import DataConverter
+        from cmi.core.data_processors import DataConverter
 
         data = {"inner": {"value": 42}}
         result = DataConverter.flatten_nested_dict(data, "prefix")
@@ -1720,7 +1676,7 @@ class TestDataProcessors:
 
     def test_data_converter_to_serializable(self):
         """Test object serialization."""
-        from claude_monitor.core.data_processors import DataConverter
+        from cmi.core.data_processors import DataConverter
 
         # Test datetime
         dt = datetime(2024, 1, 1, 12, 0, 0, tzinfo=timezone.utc)

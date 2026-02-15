@@ -5,7 +5,7 @@ from unittest.mock import mock_open, patch
 
 import pytest
 
-from claude_monitor._version import _get_version_from_pyproject, get_version
+from cmi._version import _get_version_from_pyproject, get_version
 
 
 def test_get_version_from_metadata() -> None:
@@ -14,14 +14,14 @@ def test_get_version_from_metadata() -> None:
         mock_version.return_value = "3.0.0"
         version = get_version()
         assert version == "3.0.0"
-        mock_version.assert_called_once_with("claude-monitor")
+        mock_version.assert_called_once_with("cmi")
 
 
 def test_get_version_fallback_to_pyproject() -> None:
     """Test fallback to pyproject.toml when package not installed."""
     mock_toml_content = """
 [project]
-name = "claude-monitor"
+name = "cmi"
 version = "3.0.0"
 """
 
@@ -61,7 +61,7 @@ def test_get_version_fallback_unknown() -> None:
 
 def test_version_import_from_main_module() -> None:
     """Test that version can be imported from main module."""
-    from claude_monitor import __version__
+    from cmi import __version__
 
     assert isinstance(__version__, str)
     assert len(__version__) > 0
@@ -69,7 +69,7 @@ def test_version_import_from_main_module() -> None:
 
 def test_version_format() -> None:
     """Test that version follows expected format."""
-    from claude_monitor import __version__
+    from cmi import __version__
 
     # Should be semantic version format (X.Y.Z) or include "unknown"
     if __version__ != "unknown":
@@ -85,8 +85,8 @@ def test_version_format() -> None:
 
 def test_version_consistency() -> None:
     """Test that version is consistent across imports."""
-    from claude_monitor import __version__ as version1
-    from claude_monitor._version import __version__ as version2
+    from cmi import __version__ as version1
+    from cmi._version import __version__ as version2
 
     assert version1 == version2, "Version should be consistent across imports"
 
@@ -114,7 +114,7 @@ def test_version_matches_pyproject() -> None:
                 expected_version = data["project"]["version"]
 
         # Compare with module version (only in installed package)
-        from claude_monitor import __version__
+        from cmi import __version__
 
         if __version__ != "unknown":
             assert __version__ == expected_version, (
