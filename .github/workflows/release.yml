@@ -108,4 +108,4 @@
          run: |
            echo "🎉 Successfully released v${{ needs.check-version.outputs.version }}!"
            echo "- GitHub Release: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.check-version.outputs.version }}"
-           echo "- PyPI: https://pypi.org/project/claude-monitor/${{ needs.check-version.outputs.version }}/"
+           echo "- PyPI: https://pypi.org/project/cmi/${{ needs.check-version.outputs.version }}/"
