@@ -1,5 +1,5 @@
-# 🎯 Claude Code Usage Monitor
-[![PyPI Version](https://img.shields.io/pypi/v/claude-monitor.svg)](https://pypi.org/project/claude-monitor/)
+# 🎯 CMI - Claude Monitor Indicators
+[![PyPI Version](https://img.shields.io/pypi/v/cmi.svg)](https://pypi.org/project/cmi/)
 [![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
@@ -86,16 +86,16 @@ The Custom plan automatically adapts to your usage patterns by analyzing all you
 
 The fastest and easiest way to install and use the monitor:
 
-[![PyPI](https://img.shields.io/pypi/v/claude-monitor.svg)](https://pypi.org/project/claude-monitor/)
+[![PyPI](https://img.shields.io/pypi/v/cmi.svg)](https://pypi.org/project/cmi/)
 
 #### Install from PyPI
 
 ```bash
 # Install directly from PyPI with uv (easiest)
-uv tool install claude-monitor
+uv tool install cmi
 
 # Run from anywhere
-claude-monitor  # or cmonitor, ccmonitor for short
+cmi
 ```
 
 
@@ -103,12 +103,12 @@ claude-monitor  # or cmonitor, ccmonitor for short
 
 ```bash
 # Clone and install from source
-git clone https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor.git
-cd Claude-Code-Usage-Monitor
+git clone https://github.com/mrlitong/CMI-Claude-Monitor-Indicators.git
+cd CMI-Claude-Monitor-Indicators
 uv tool install .
 
 # Run from anywhere
-claude-monitor
+cmi
 ```
 
 
@@ -130,24 +130,24 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 ```bash
 # Install from PyPI
-pip install claude-monitor
+pip install cmi
 
-# If claude-monitor command is not found, add ~/.local/bin to PATH:
+# If cmi command is not found, add ~/.local/bin to PATH:
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc  # or restart your terminal
 
 # Run from anywhere
-claude-monitor  # or cmonitor, ccmonitor for short
+cmi
 ```
 
 
 >
-> **⚠️ PATH Setup**: If you see WARNING: The script claude-monitor is installed in '/home/username/.local/bin' which is not on PATH, follow the export PATH command above.
+> **⚠️ PATH Setup**: If you see WARNING: The script cmi is installed in '/home/username/.local/bin' which is not on PATH, follow the export PATH command above.
 >
 > **⚠️ Important**: On modern Linux distributions (Ubuntu 23.04+, Debian 12+, Fedora 38+), you may encounter an "externally-managed-environment" error. Instead of using --break-system-packages, we strongly recommend:
 > 1. **Use uv instead** (see above) - it's safer and easier
 > 2. **Use a virtual environment** - python3 -m venv myenv && source myenv/bin/activate
-> 3. **Use pipx** - pipx install claude-monitor
+> 3. **Use pipx** - pipx install cmi
 >
 > See the Troubleshooting section for detailed solutions.
 
@@ -156,20 +156,20 @@ claude-monitor  # or cmonitor, ccmonitor for short
 #### pipx (Isolated Environments)
 ```bash
 # Install with pipx
-pipx install claude-monitor
+pipx install cmi
 
 # Run from anywhere
-claude-monitor  # or claude-code-monitor, cmonitor, ccmonitor, ccm for short
+cmi
 ```
 
 
 #### conda/mamba
 ```bash
 # Install with pip in conda environment
-pip install claude-monitor
+pip install cmi
 
 # Run from anywhere
-claude-monitor  # or cmonitor, ccmonitor for short
+cmi
 ```
 
 
@@ -179,7 +179,7 @@ claude-monitor  # or cmonitor, ccmonitor for short
 
 ```bash
 # Show help information
-claude-monitor --help
+cmi --help
 ```
 
 #### Available Command-Line Parameters
@@ -212,12 +212,8 @@ claude-monitor --help
 
 #### Command Aliases
 
-The tool can be invoked using any of these commands:
-- claude-monitor (primary)
-- claude-code-monitor (full name)
-- cmonitor (short)
-- ccmonitor (short alternative)
-- ccm (shortest)
+The tool can be invoked using the command:
+- cmi (primary)
 
 #### Save Flags Feature
 
@@ -232,21 +228,21 @@ The monitor automatically saves your preferences to avoid re-specifying them on 
 - Reset hour (--reset-hour)
 - Custom token limits (--custom-limit-tokens)
 
-**Configuration Location:** ~/.claude-monitor/last_used.json
+**Configuration Location:** ~/.cmi/last_used.json
 
 **Usage Examples:**
 ```bash
 # First run - specify preferences
-claude-monitor --plan pro --theme dark --timezone "America/New_York"
+cmi --plan pro --theme dark --timezone "America/New_York"
 
 # Subsequent runs - preferences automatically restored
-claude-monitor --plan pro
+cmi --plan pro
 
 # Override saved settings for this session
-claude-monitor --plan pro --theme light
+cmi --plan pro --theme light
 
 # Clear all saved preferences
-claude-monitor --clear
+cmi --clear
 ```
 
 **Key Features:**
@@ -261,20 +257,14 @@ claude-monitor --clear
 #### With uv tool installation (Recommended)
 ```bash
 # Default (Custom plan with auto-detection)
-claude-monitor
-
-# Alternative commands
-claude-code-monitor  # Full descriptive name
-cmonitor             # Short alias
-ccmonitor            # Short alternative
-ccm                  # Shortest alias
+cmi
 
 # Exit the monitor
 # Press Ctrl+C to gracefully exit
 ```
 
 #### Development mode
-If running from source, use python -m claude_monitor from the src/ directory.
+If running from source, use python -m cmi from the src/ directory.
 
 ### Configuration Options
 
@@ -282,42 +272,42 @@ If running from source, use python -m claude_monitor from the src/ directory.
 
 ```bash
 # Custom plan with P90 auto-detection (Default)
-claude-monitor --plan custom
+cmi --plan custom
 
 # Pro plan (~44,000 tokens)
-claude-monitor --plan pro
+cmi --plan pro
 
 # Max5 plan (~88,000 tokens)
-claude-monitor --plan max5
+cmi --plan max5
 
 # Max20 plan (~220,000 tokens)
-claude-monitor --plan max20
+cmi --plan max20
 
 # Custom plan with explicit token limit
-claude-monitor --plan custom --custom-limit-tokens 100000
+cmi --plan custom --custom-limit-tokens 100000
 ```
 
 #### Custom Reset Times
 
 ```bash
 # Reset at 3 AM
-claude-monitor --reset-hour 3
+cmi --reset-hour 3
 
 # Reset at 10 PM
-claude-monitor --reset-hour 22
+cmi --reset-hour 22
 ```
 
 #### Usage View Configuration
 
 ```bash
 # Real-time monitoring with live updates (Default)
-claude-monitor --view realtime
+cmi --view realtime
 
 # Daily token usage aggregated in table format
-claude-monitor --view daily
+cmi --view daily
 
 # Monthly token usage aggregated in table format
-claude-monitor --view monthly
+cmi --view monthly
 
 ```
 
@@ -325,19 +315,19 @@ claude-monitor --view monthly
 
 ```bash
 # Adjust refresh rate (1-60 seconds, default: 10)
-claude-monitor --refresh-rate 5
+cmi --refresh-rate 5
 
 # Adjust display refresh rate (0.1-20 Hz, default: 0.75)
-claude-monitor --refresh-per-second 1.0
+cmi --refresh-per-second 1.0
 
 # Set time format (auto-detected by default)
-claude-monitor --time-format 24h  # or 12h
+cmi --time-format 24h  # or 12h
 
 # Force specific theme
-claude-monitor --theme dark  # light, dark, classic, auto
+cmi --theme dark  # light, dark, classic, auto
 
 # Clear saved configuration
-claude-monitor --clear
+cmi --clear
 ```
 
 #### Timezone Configuration
@@ -346,29 +336,29 @@ The default timezone is **auto-detected from your system**. Override with any va
 
 ```bash
 # Use US Eastern Time
-claude-monitor --timezone America/New_York
+cmi --timezone America/New_York
 
 # Use Tokyo time
-claude-monitor --timezone Asia/Tokyo
+cmi --timezone Asia/Tokyo
 
 # Use UTC
-claude-monitor --timezone UTC
+cmi --timezone UTC
 
 # Use London time
-claude-monitor --timezone Europe/London
+cmi --timezone Europe/London
 ```
 
 #### Logging and Debugging
 
 ```bash
 # Enable debug logging
-claude-monitor --debug
+cmi --debug
 
 # Log to file
-claude-monitor --log-file ~/.claude-monitor/logs/monitor.log
+cmi --log-file ~/.cmi/logs/monitor.log
 
 # Set log level
-claude-monitor --log-level WARNING  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+cmi --log-level WARNING  # DEBUG, INFO, WARNING, ERROR, CRITICAL
 ```
 
 ### Available Plans
@@ -412,7 +402,7 @@ claude-monitor --log-level WARNING  # DEBUG, INFO, WARNING, ERROR, CRITICAL
 - Command aliases: claude-code-monitor, cmonitor, ccmonitor, ccm for convenience
 
 #### **Breaking Changes**
-- Package name changed from claude-usage-monitor to claude-monitor
+- Package name changed from claude-usage-monitor to cmi
 - Default plan changed from pro to custom (with auto-detection)
 - Minimum Python version increased to 3.9+
 - Command structure updated (see examples above)
@@ -597,10 +587,10 @@ The auto-detection system:
 
 ```bash
 # Set custom reset time to 9 AM
-./claude_monitor.py --reset-hour 9
+cmi --reset-hour 9
 
 # With your timezone
-./claude_monitor.py --reset-hour 9 --timezone US/Eastern
+cmi --reset-hour 9 --timezone US/Eastern
 ```
 
 
@@ -614,10 +604,10 @@ The auto-detection system:
 
 ```bash
 # Reset at midnight for clean daily boundaries
-./claude_monitor.py --reset-hour 0
+cmi --reset-hour 0
 
 # Late evening reset (11 PM)
-./claude_monitor.py --reset-hour 23
+cmi --reset-hour 23
 ```
 
 
@@ -631,10 +621,10 @@ The auto-detection system:
 
 ```bash
 # Auto-detect your highest previous usage
-claude-monitor --plan custom_max
+cmi --plan custom
 
 # Monitor with custom scheduling
-claude-monitor --plan custom_max --reset-hour 6
+cmi --plan custom --reset-hour 6
 ```
 
 
@@ -648,16 +638,16 @@ claude-monitor --plan custom_max --reset-hour 6
 
 ```bash
 # US East Coast
-claude-monitor --timezone America/New_York
+cmi --timezone America/New_York
 
 # Europe
-claude-monitor --timezone Europe/London
+cmi --timezone Europe/London
 
 # Asia Pacific
-claude-monitor --timezone Asia/Singapore
+cmi --timezone Asia/Singapore
 
 # UTC for international team coordination
-claude-monitor --timezone UTC --reset-hour 12
+cmi --timezone UTC --reset-hour 12
 ```
 
 
@@ -666,7 +656,7 @@ claude-monitor --timezone UTC --reset-hour 12
 
 ```bash
 # Just run it with defaults
-claude-monitor
+cmi
 
 # Press Ctrl+C after checking status
 ```
@@ -676,16 +666,16 @@ claude-monitor
 
 ```bash
 # View daily usage breakdown with detailed statistics
-claude-monitor --view daily
+cmi --view daily
 
 # Analyze monthly token consumption trends
-claude-monitor --view monthly --plan max20
+cmi --view monthly --plan max20
 
 # Export daily usage data to log file for analysis
-claude-monitor --view daily --log-file ~/daily-usage.log
+cmi --view daily --log-file ~/daily-usage.log
 
 # Review usage in different timezone
-claude-monitor --view daily --timezone America/New_York
+cmi --view daily --timezone America/New_York
 ```
 
 **Use Cases**:
@@ -701,7 +691,7 @@ claude-monitor --view daily --timezone America/New_York
 **Start with Default (Recommended for New Users)**
 ```bash
 # Pro plan detection with auto-switching
-claude-monitor
+cmi
 ```
 
 - Monitor will detect if you exceed Pro limits
@@ -711,17 +701,17 @@ claude-monitor
 **Known Subscription Users**
 ```bash
 # If you know you have Max5
-claude-monitor --plan max5
+cmi --plan max5
 
 # If you know you have Max20
-claude-monitor --plan max20
+cmi --plan max20
 ```
 
 
 **Unknown Limits**
 ```bash
 # Auto-detect from previous usage
-claude-monitor --plan custom_max
+cmi --plan custom
 ```
 
 
@@ -733,10 +723,7 @@ claude-monitor --plan custom_max
 
 ```bash
    # Begin monitoring when starting Claude work (uv installation)
-   claude-monitor
-
-   # Or development mode
-   ./claude_monitor.py
+   cmi
    ```
 
    - Gives accurate session tracking from the start
@@ -747,8 +734,8 @@ claude-monitor --plan custom_max
 
 ```bash
    # Easy installation and updates with uv
-   uv tool install claude-monitor
-   claude-monitor --plan max5
+   uv tool install cmi
+   cmi --plan max5
    ```
 
    - Clean system installation
@@ -759,7 +746,7 @@ claude-monitor --plan custom_max
 
 ```bash
    # Add to ~/.bashrc or ~/.zshrc (only for development setup)
-   alias claude-monitor='cd ~/Claude-Code-Usage-Monitor && source venv/bin/activate && ./claude_monitor.py'
+   alias cmi='cd ~/CMI-Claude-Monitor-Indicators && source venv/bin/activate && python -m cmi'
    ```
 
 
@@ -774,7 +761,7 @@ claude-monitor --plan custom_max
 
 ```bash
    # Plan heavy usage around reset times
-   claude-monitor --reset-hour 9
+   cmi --reset-hour 9
    ```
 
    - Schedule large tasks after resets
@@ -785,7 +772,7 @@ claude-monitor --plan custom_max
 
 ```bash
    # Always use your actual timezone
-   claude-monitor --timezone Europe/Warsaw
+   cmi --timezone Europe/Warsaw
    ```
 
    - Accurate reset time predictions
@@ -804,13 +791,10 @@ claude-monitor --plan custom_max
 
 ```bash
    # Start monitoring with your development session (uv installation)
-   tmux new-session -d -s claude-monitor 'claude-monitor'
-
-   # Or development mode
-   tmux new-session -d -s claude-monitor './claude_monitor.py'
+   tmux new-session -d -s cmi 'cmi'
 
    # Check status anytime
-   tmux attach -t claude-monitor
+   tmux attach -t cmi
    ```
 
 
@@ -824,7 +808,7 @@ claude-monitor --plan custom_max
 **Large Project Development**
 ```bash
 # Setup for sustained development
-claude-monitor --plan max20 --reset-hour 8 --timezone America/New_York
+cmi --plan max20 --reset-hour 8 --timezone America/New_York
 ```
 
 
@@ -838,14 +822,14 @@ claude-monitor --plan max20 --reset-hour 8 --timezone America/New_York
 **Learning & Experimentation**
 ```bash
 # Flexible setup for learning
-claude-monitor --plan pro
+cmi --plan pro
 ```
 
 
 **Sprint Development**
 ```bash
 # High-intensity development setup
-claude-monitor --plan max20 --reset-hour 6
+cmi --plan max20 --reset-hour 6
 ```
 
 
@@ -857,14 +841,14 @@ For contributors and developers who want to work with the source code:
 
 ```bash
 # Clone the repository
-git clone https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor.git
-cd Claude-Code-Usage-Monitor
+git clone https://github.com/mrlitong/CMI-Claude-Monitor-Indicators.git
+cd CMI-Claude-Monitor-Indicators
 
 # Install in development mode
 pip install -e .
 
 # Run from source
-python -m claude_monitor
+python -m cmi
 ```
 
 
@@ -884,7 +868,7 @@ cd src/
 python -m pytest
 
 # Run with coverage
-python -m pytest --cov=claude_monitor --cov-report=html
+python -m pytest --cov=cmi --cov-report=html
 
 # Run specific test modules
 python -m pytest tests/test_analysis.py -v
@@ -946,8 +930,8 @@ virtualenv venv
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor.git
-cd Claude-Code-Usage-Monitor
+git clone https://github.com/mrlitong/CMI-Claude-Monitor-Indicators.git
+cd CMI-Claude-Monitor-Indicators
 
 # 2. Create virtual environment
 python3 -m venv venv
@@ -961,13 +945,10 @@ source venv/bin/activate
 # venv\Scripts\activate
 
 # 4. Install Python dependencies
-pip install pytz
-pip install rich>=13.0.0
-# 5. Make script executable (Linux/Mac only)
-chmod +x claude_monitor.py
+pip install -e .
 
-# 6. Run the monitor
-python claude_monitor.py
+# 5. Run the monitor
+cmi
 ```
 
 
@@ -977,15 +958,14 @@ After initial setup, you only need:
 
 ```bash
 # Navigate to project directory
-cd Claude-Code-Usage-Monitor
+cd CMI-Claude-Monitor-Indicators
 
 # Activate virtual environment
 source venv/bin/activate  # Linux/Mac
 # venv\Scripts\activate   # Windows
 
 # Run monitor
-./claude_monitor.py  # Linux/Mac
-# python claude_monitor.py  # Windows
+cmi
 
 # When done, deactivate
 deactivate
@@ -997,10 +977,10 @@ deactivate
 Create an alias for quick access:
 ```bash
 # Add to ~/.bashrc or ~/.zshrc
-alias claude-monitor='cd ~/Claude-Code-Usage-Monitor && source venv/bin/activate && ./claude_monitor.py'
+alias cmi='cd ~/CMI-Claude-Monitor-Indicators && source venv/bin/activate && python -m cmi'
 
 # Then just run:
-claude-monitor
+cmi
 ```
 
 
@@ -1026,7 +1006,7 @@ error: externally-managed-environment
    curl -LsSf https://astral.sh/uv/install.sh | sh
 
    # Then install with uv
-   uv tool install claude-monitor
+   uv tool install cmi
    ```
 
 
@@ -1038,8 +1018,8 @@ error: externally-managed-environment
    # or
    python3 -m pip install --user pipx
 
-   # Install claude-monitor
-   pipx install claude-monitor
+   # Install cmi
+   pipx install cmi
    ```
 
 
@@ -1048,27 +1028,27 @@ error: externally-managed-environment
 ```bash
    python3 -m venv myenv
    source myenv/bin/activate
-   pip install claude-monitor
+   pip install cmi
    ```
 
 
 4. **Force installation (Not Recommended)**
 
 ```bash
-   pip install --user claude-monitor --break-system-packages
+   pip install --user cmi --break-system-packages
    ```
 
    ⚠️ **Warning**: This bypasses system protection and may cause conflicts. We strongly recommend using a virtual environment instead.
 
 #### Command Not Found After pip Install
 
-If claude-monitor command is not found after pip installation:
+If cmi command is not found after pip installation:
 
 1. **Check if it's a PATH issue**
 
 ```bash
    # Look for the warning message during pip install:
-   # WARNING: The script claude-monitor is installed in '/home/username/.local/bin' which is not on PATH
+   # WARNING: The script cmi is installed in '/home/username/.local/bin' which is not on PATH
    ```
 
 
@@ -1087,14 +1067,14 @@ If claude-monitor command is not found after pip installation:
 
 ```bash
    # Find where pip installed the script
-   pip show -f claude-monitor | grep claude-monitor
+   pip show -f cmi | grep cmi
    ```
 
 
 4. **Run directly with Python**
 
 ```bash
-   python3 -m claude_monitor
+   python3 -m cmi
    ```
 
 
@@ -1113,15 +1093,15 @@ If you have multiple Python versions:
 2. **Use specific Python version**
 
 ```bash
-   python3.11 -m pip install claude-monitor
-   python3.11 -m claude_monitor
+   python3.11 -m pip install cmi
+   python3.11 -m cmi
    ```
 
 
 3. **Use uv (handles Python versions automatically)**
 
 ```bash
-   uv tool install claude-monitor
+   uv tool install cmi
    ```
 
 
@@ -1137,7 +1117,7 @@ If you encounter the error No active session found, please follow these steps:
    If the issue persists, consider specifying a custom configuration path. By default, Claude Code uses ~/.config/claude. You may need to adjust this path depending on your environment.
 
 ```bash
-CLAUDE_CONFIG_DIR=~/.config/claude ./claude_monitor.py
+CLAUDE_CONFIG_DIR=~/.config/claude cmi
 ```
 
 
